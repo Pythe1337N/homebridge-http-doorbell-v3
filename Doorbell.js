@@ -29,20 +29,18 @@ class Doorbell {
             .getCharacteristic(this.Characteristic.ProgrammableSwitchEvent)
             .on('get', this.getState.bind(this));
 
-        this.updateValue = this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).updateValue;
-
         return [info, this.service];
     }
 
     ring() {
         this.state = true;
-        this.updateValue(this.state);
+        this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).updateValue(this.state);
         if (this.timeout) {
             clearTimeout(this.timeout);
         }
         this.timeout = setTimeout(() => {
             this.state = false;
-            this.updateValue(this.state);
+            this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).updateValue(this.state);
             this.timeout = undefined;
         }, this.debounce * 1000);
     }
