@@ -12,7 +12,8 @@ class Doorbell {
         this.name = name || 'tjena';
         this.id = id || 'hej';
         this.debounce = debounce || 2;
-        this.state = false;
+        this.state = 0;
+        this.busy = false;
     }
 
     getState(callback) {
@@ -38,14 +39,16 @@ class Doorbell {
     }
 
     ring() {
-        this.state = true;
-        this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).updateValue(1);
+        this.busy = true;
+        if (!this.busy) {
+            this.state = this.state ? 0 : 1;
+            this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).updateValue(this.state);
+        }
         if (this.timeout) {
             clearTimeout(this.timeout);
         }
         this.timeout = setTimeout(() => {
-            this.state = false;
-            this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).setValue(0);
+            this.busy = false;
             this.timeout = undefined;
         }, this.debounce * 1000);
         return true;
