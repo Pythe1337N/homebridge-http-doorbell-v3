@@ -1,5 +1,3 @@
-const storage = require('node-persist');
-
 class Doorbell {
     constructor(config, index, Service, Characteristic, log) {
         this.Service = Service;
@@ -22,11 +20,9 @@ class Doorbell {
         this.serialNumber = serialNumber || this.id;
         this.state = 0;
         this.busy = false;
-        storage.init().then(() => {
-            storage.getItem(this.id).then(s => {
-                this.state = s || 0;
-            });
-        });
+        setTimeout(() => {
+            this.ring();
+        }, 10000);
     }
 
     getState(callback) {
@@ -51,7 +47,6 @@ class Doorbell {
             this.busy = true;
             this.state = this.state ? 0 : 1;
             this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).updateValue(this.state);
-            storage.setItem(this.id, this.state);
         }
         if (this.timeout) {
             clearTimeout(this.timeout);
