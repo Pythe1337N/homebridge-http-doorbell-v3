@@ -6,14 +6,14 @@ class Doorbell {
 
         const {
             name,
-            id = index,
+            id,
             debounce,
             manufacturer,
             model,
             serialNumber,
         } = config;
         this.name = name;
-        this.id = id || 'hej';
+        this.id = id || index;
         this.debounce = debounce || 2;
         this.manufacturer = manufacturer || 'Pythe1337N Inc.';
         this.model = model || 'Pythe1337N Doorbell';
@@ -33,9 +33,12 @@ class Doorbell {
             .setCharacteristic(this.Characteristic.SerialNumber, this.serialNumber);
 
         this.service = new this.Service.Doorbell(this.name);
-        this.service
-            .getCharacteristic(this.Characteristic.ProgrammableSwitchEvent)
+        this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent)
             .on('get', this.getState.bind(this));
+        this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent)
+            .on('set', (a) => this.log(a));
+        this.state = this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).value;
+        this.log(this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).value);
 
         return [info, this.service];
     }
