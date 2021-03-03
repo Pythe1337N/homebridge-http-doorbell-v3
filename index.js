@@ -10,7 +10,10 @@ class HTTPDoorbell {
             Service,
             Characteristic
         } = hap || {};
-        const { doorbells: doorbellsConfig } = config || {};
+        const {
+            doorbells: doorbellsConfig,
+            port = 9090
+        } = config || {};
         this.accessoriesArray = doorbellsConfig.map((d, i) => new Doorbell(d, i, Service, Characteristic, log));
         this.doorbells = this.accessoriesArray.reduce((acc, curr) => ({...acc, [curr.id]: curr}), {});
 
@@ -26,8 +29,8 @@ class HTTPDoorbell {
             }
         });
 
-        this.server.listen(2501, () => {
-            this.log('doorbells is listening to port 2501');
+        this.server.listen(port, () => {
+            this.log(`Doorbells server is listening to port ${port}`);
         });
     }
 
