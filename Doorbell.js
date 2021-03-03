@@ -20,9 +20,14 @@ class Doorbell {
         this.serialNumber = serialNumber || this.id;
         this.state = 0;
         this.busy = false;
-        setTimeout(() => {
-            this.ring();
-        }, 10000);
+    }
+
+    stepState() {
+        if (this.state === 1) {
+            this.state = 2;
+        } else {
+            this.state = 1;
+        }
     }
 
     getState(callback) {
@@ -45,8 +50,8 @@ class Doorbell {
     ring() {
         if (!this.busy) {
             this.busy = true;
-            this.state = this.state ? 0 : 1;
             this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).updateValue(this.state);
+            this.stepState();
         }
         if (this.timeout) {
             clearTimeout(this.timeout);
