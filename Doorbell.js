@@ -36,11 +36,12 @@ class Doorbell {
         this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent)
             .on('get', this.getState.bind(this));
 
+        this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).updateValue(this.state);
+
         return [info, this.service];
     }
 
     ring() {
-        this.log(this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).value);
         if (!this.busy) {
             this.busy = true;
             this.state = this.state ? 0 : 1;
