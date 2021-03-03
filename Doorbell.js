@@ -34,8 +34,9 @@ class Doorbell {
 
     ring() {
         this.state = true;
-        if (!this.timeout) {
-            this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).updateValue(this.Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS);
+        this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).updateValue(this.Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS);
+        if (this.timeout) {
+            clearTimeout(this.timeout);
         }
         this.timeout = setTimeout(() => {
             this.state = false;
