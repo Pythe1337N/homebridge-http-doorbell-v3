@@ -18,5 +18,15 @@
   "bugs": {
     "url": "https://github.com/Pythe1337N/homebridge-http-doorbell-v3/issues"
   },
-  "homepage": "https://github.com/Pythe1337N/homebridge-http-doorbell-v3#readme"
+  "homepage": "https://github.com/Pythe1337N/homebridge-http-doorbell-v3#readme",
+  "keywords": [
+    "homebridge-plugin",
+    "homebridge",
+    "homekit",
+    "doorbell"
+  ],
+  "engines": {
+    "node": ">=0.12.0",
+    "homebridge": ">=0.2.0"
+  }
 }

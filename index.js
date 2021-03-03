@@ -51,5 +51,5 @@ class HTTPDoorbell {
 
 
 module.exports = api => {
-    api.registerAccessory('http-doorbell-v3', HTTPDoorbell);
+    api.registerPlatform('http-doorbell-v3', HTTPDoorbell);
 };

@@ -20,9 +20,9 @@ class Doorbell {
 
     getServices() {
         const info = new this.Service.AccessoryInformation();
-        info.setCharacteristic(Characteristic.Manufacturer, "Bernberg Inc.")
-            .setCharacteristic(Characteristic.Model, "Bernberg Doorbell")
-            .setCharacteristic(Characteristic.SerialNumber, this.id);
+        info.setCharacteristic(this.Characteristic.Manufacturer, "Bernberg Inc.")
+            .setCharacteristic(this.Characteristic.Model, "Bernberg Doorbell")
+            .setCharacteristic(this.Characteristic.SerialNumber, this.id);
 
         this.service = new this.Service.Doorbell(this.name);
         this.service
