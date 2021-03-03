@@ -34,13 +34,13 @@ class Doorbell {
 
     ring() {
         this.state = true;
-        this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).updateValue(this.Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS);
+        this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).updateValue(0);
         if (this.timeout) {
             clearTimeout(this.timeout);
         }
         this.timeout = setTimeout(() => {
             this.state = false;
-            this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).updateValue(undefined);
+            this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).updateValue(-1);
             this.timeout = undefined;
         }, this.debounce * 1000);
         return true;
