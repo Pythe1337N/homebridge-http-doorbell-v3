@@ -35,15 +35,12 @@ class Doorbell {
         this.service = new this.Service.Doorbell(this.name);
         this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent)
             .on('get', this.getState.bind(this));
-        this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent)
-            .on('set', (a) => this.log(a));
-        this.state = this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).value;
-        this.log(this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).value);
 
         return [info, this.service];
     }
 
     ring() {
+        this.log(this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).value);
         if (!this.busy) {
             this.busy = true;
             this.state = this.state ? 0 : 1;
