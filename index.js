@@ -11,7 +11,7 @@ class HTTPDoorbell {
             Characteristic
         } = hap || {};
         const { doorbells: doorbellsConfig } = config || {};
-        this.accessoriesArray = doorbellsConfig.map(d => new Doorbell(d, Service, Characteristic));
+        this.accessoriesArray = doorbellsConfig.map(d => new Doorbell(d, Service, Characteristic, log));
         this.doorbells = this.accessoriesArray.reduce((acc, curr) => ({...acc, [curr.id]: curr}), {});
 
         this.server = http.createServer((req, res) => {

@@ -1,7 +1,8 @@
 class Doorbell {
-    constructor(config, Service, Characteristic) {
+    constructor(config, Service, Characteristic, log) {
         this.Service = Service;
         this.Characteristic = Characteristic;
+        this.log = log;
 
         const {
             name,
@@ -32,15 +33,19 @@ class Doorbell {
         return [info, this.service];
     }
 
+    identify() {
+        this.log("Identify requested!");
+    }
+
     ring() {
         this.state = true;
-        this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).updateValue(0);
+        this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).updateValue(1);
         if (this.timeout) {
             clearTimeout(this.timeout);
         }
         this.timeout = setTimeout(() => {
             this.state = false;
-            this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).updateValue(-1);
+            this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).setValue(0);
             this.timeout = undefined;
         }, this.debounce * 1000);
         return true;
