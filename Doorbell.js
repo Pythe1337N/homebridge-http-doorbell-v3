@@ -39,8 +39,8 @@ class Doorbell {
     }
 
     ring() {
-        this.busy = true;
         if (!this.busy) {
+            this.busy = true;
             this.state = this.state ? 0 : 1;
             this.service.getCharacteristic(this.Characteristic.ProgrammableSwitchEvent).updateValue(this.state);
         }
