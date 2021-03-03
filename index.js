@@ -11,14 +11,19 @@ class HTTPDoorbell {
             Characteristic
         } = hap || {};
         const { doorbells: doorbellsConfig } = config || {};
-        this.accessoriesArray = doorbellsConfig.map(d => new Doorbell(d, Service, Characteristic, log));
+        this.accessoriesArray = doorbellsConfig.map((d, i) => new Doorbell(d, i, Service, Characteristic, log));
         this.doorbells = this.accessoriesArray.reduce((acc, curr) => ({...acc, [curr.id]: curr}), {});
 
         this.server = http.createServer((req, res) => {
             const { url } = req || {};
             const [, bellId] = url.match(/\/([a-zA-Z0-9]+)/) || [];
             const isOK = this.handleRequest(bellId);
-            res.end(isOK ? 'OK' : 'FAIL');
+            if (isOK) {
+                res.end('OK');
+            } else {
+                res.statusCode = 404;
+                res.end('NO_BELL');
+            }
         });
 
         this.server.listen(2501, () => {
@@ -38,17 +43,6 @@ class HTTPDoorbell {
         callback(this.accessoriesArray);
     }
 }
-
-/*const a = new HTTPDoorbell(console.log, {
-    doorbells: [
-        {
-            name: 'Test Name',
-            id: 'test',
-            debounce: 2
-        }
-    ]
-});*/
-
 
 module.exports = api => {
     api.registerPlatform('http-doorbell-v3', HTTPDoorbell);

@@ -1,17 +1,23 @@
 class Doorbell {
-    constructor(config, Service, Characteristic, log) {
+    constructor(config, index, Service, Characteristic, log) {
         this.Service = Service;
         this.Characteristic = Characteristic;
         this.log = log;
 
         const {
             name,
-            id,
+            id = index,
             debounce,
+            manufacturer,
+            model,
+            serialNumber,
         } = config;
-        this.name = name || 'tjena';
+        this.name = name;
         this.id = id || 'hej';
         this.debounce = debounce || 2;
+        this.manufacturer = manufacturer || 'Pythe1337N Inc.';
+        this.model = model || 'Pythe1337N Doorbell';
+        this.serialNumber = serialNumber || this.id;
         this.state = 0;
         this.busy = false;
     }
@@ -22,9 +28,9 @@ class Doorbell {
 
     getServices() {
         const info = new this.Service.AccessoryInformation();
-        info.setCharacteristic(this.Characteristic.Manufacturer, "Bernberg Inc.")
-            .setCharacteristic(this.Characteristic.Model, "Bernberg Doorbell")
-            .setCharacteristic(this.Characteristic.SerialNumber, this.id);
+        info.setCharacteristic(this.Characteristic.Manufacturer, this.manufacturer)
+            .setCharacteristic(this.Characteristic.Model, this.model)
+            .setCharacteristic(this.Characteristic.SerialNumber, this.serialNumber);
 
         this.service = new this.Service.Doorbell(this.name);
         this.service
@@ -32,10 +38,6 @@ class Doorbell {
             .on('get', this.getState.bind(this));
 
         return [info, this.service];
-    }
-
-    identify() {
-        this.log("Identify requested!");
     }
 
     ring() {
