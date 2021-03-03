@@ -22,8 +22,10 @@ class Doorbell {
         this.serialNumber = serialNumber || this.id;
         this.state = 0;
         this.busy = false;
-        storage.getItem(this.id).then(s => {
-            this.state = s || 0;
+        storage.init().then(() => {
+            storage.getItem(this.id).then(s => {
+                this.state = s || 0;
+            });
         });
     }
 
