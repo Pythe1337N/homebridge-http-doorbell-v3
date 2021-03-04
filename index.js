@@ -21,11 +21,12 @@ class HTTPDoorbell {
             const { url } = req || {};
             const [, bellId] = url.match(/\/([a-zA-Z0-9]+)/) || [];
             const isOK = this.handleRequest(bellId);
+            const response = { success: isOK };
             if (isOK) {
-                res.end('OK');
+                res.end(JSON.stringify(response));
             } else {
                 res.statusCode = 404;
-                res.end('NO_BELL');
+                res.end(JSON.stringify(response));
             }
         });
 
